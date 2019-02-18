@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<link rel="stylesheet" href="http://127.0.0.1/css/bootstrap.min.css">
+	<style>
+		*{
+			padding: 0;
+			margin:0;
+		}
+	</style>
+	<script src="http://127.0.0.1/js/jquery-3.1.1.min.js"></script>
+	<script src="http://127.0.0.1/js/GlobalAction.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">登录</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="username" class="col-form-label">用户名:</label>
+            <input type="text" class="form-control" id="username">
+          </div>
+          <div class="form-group">
+            <label for="password" class="col-form-label">密码:</label>
+            <input type="password" class="form-control" id="password">
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">登录</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<div class="container-fluid">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 20px;">
+		<div>
+			<a class="navbar-brand" href="#login" id="login" onclick="$('#exampleModal').modal({show:true})">登录</a>
+			<a class="navbar-brand" href="#register" id="register" onclick="$('#exampleModal').modal({show:true})">注册</a>
+		</div>
+		
+		<div>
+			<h4 id="role"></h4>
+		</div>
+
+		<div class="dropdown show">
+			<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			快速登录
+			</a>
+				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+					<a class="dropdown-item" href="#loginSchool">学校</a>
+					<a class="dropdown-item" href="#loginApplication">应聘者</a>
+					<a class="dropdown-item" href="#loginCompany">公司</a>
+				</div>
+		</div>
+		<script>
+
+			$('#exampleModal').on('hidden.bs.modal',function(){
+				window.location.hash = ''
+			})
+			$('#exampleModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget) // Button that triggered the modal
+			  // var recipient = button.data('whatever') // Extract info from data-* attributes
+			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+			  // console.log(event);
+			  var modal = $(this)
+			  $(window).on('hashchange',function(){
+			  	if (window.location.hash == '#register') {
+				 	 modal.find('.modal-title').text('注册')
+				 	 modal.find('.btn-primary').text('注册')
+
+				  }else if(window.location.hash == '#login'){
+				 	 modal.find('.modal-title').text('登录')
+				 	 modal.find('.btn-primary').text('登录')
+				 	 
+				  }
+				})
+			   	modal.find('.btn-primary').click(()=>{
+				 	 user([$('#username').val(),$('#password').val()])
+				 })
+			  // modal.find('.modal-title').text('New message to ')
+			  // modal.find('.modal-body input').val(recipient)
+			})
+			var account = {
+				apllicant:['605251963@qq.com','123456'],
+				company:['862573687@qq.com','123456'],
+				school:['18680026210','123456'],
+			}
+			var host = 'http://fuck.u'
+			var lurl = '/api/user/get'
+			var rurl = '/api/register/'
+			var api = ''
+			function user(data){
+				$.load({
+					url:host+api,
+					method:'POST',
+					data:{
+						username:data[0],
+						password:data[1]
+					}
+				}).then(data=>{
+					$.success('登录成功')
+					$('#role').val(data.role);
+				}).catch(()=>{
+					$.error('登录失败')
+				})
+			}
+		</script>
+
+	</nav>
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">http://fuck.u/api/</span>
+				</div>
+				<input type="text" class="form-control" placeholder="url" id="url">
+				<select class="custom-select" id="methodChoose">
+					<option value="GET" selected>GET</option>
+					<option value="POST">POST</option>
+					<option value="PUT">PUT</option>
+					<option value="DELETE">DELETE</option>
+				</select>
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="button" id='send'>发送</button>
+				</div>
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">参数</span>
+				</div>
+				<input type="text" class="form-control" placeholder="id=1&a=2" id="params">
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">文件</span>
+				</div>
+				<label for="file" class="form-control"><span id="file_name">上传文件</span>
+				<input type="file" class="form-control" id="file" style="display: none"></label>
+				<script>
+					file.onchange=function(){
+						if (this.files[0]) {
+							file_name.innerHTML = this.files[0].name
+						}
+						// console.log(this.files[0])
+					}
+					
+
+				</script>
+			</div>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">描述</span>
+				</div>
+				<textarea class="form-control" id="note"></textarea>
+			</div>
+			<div class="input-group mb-3">
+				<select class="custom-select" id="actionChoose">
+					<option value="2" >保存</option>
+					<option value="0" >清空并保存</option>
+					<option value="1">清空</option>
+					<!-- <option value="2">上一个</option> -->
+					<option value="3" selected>选择之前</option>
+				</select>
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="button" id="action">执行</button>
+
+				</div>
+			</div>
+			<div class="input-group" style="visibility: hidden;" id="choose">
+				<input type="text" class="form-control" id="search" />
+				<ul id="mydata" style="position:absolute;top: 40px; width: calc(100% - 116px);max-height: 200px;overflow-y: auto;background-color:#fff">
+					<!-- <li class="odata">
+						<span class="data-detail">left</span>
+						<span class="data-detail">center</span>
+						<span class="data-detail">right</span>
+					</li> -->
+
+				</ul>
+				<style>
+					#mydata{
+						border: 2px solid #ccc;
+						border-radius: 5px;
+						padding: 7px 0;
+						display: none;
+					}
+					/*#search:focus ~ #mydata{
+						display: block
+					}
+					.odata:hover  .btn-danger{
+						display: block
+					}*/
+					.delete{
+						position: absolute;right: -60px;display: none;
+					}
+					.odata{
+						display: flex;justify-content: space-between;z-index: 9;text-overflow: ellipsis;
+					}
+					.data-detail{
+						padding: 6px;
+						max-width: 30%;overflow-x: hidden;text-overflow: ellipsis;
+					}
+					.odata:hover{
+						background-color: #f5f5f5;
+					}
+				</style>
+				<!-- <datalist id="mydata">
+					<option label="get" value="url" data-params="[]"/>
+				</datalist> -->
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="button" id="update">修改</button>
+					<button class="btn btn-danger" type="button" id="delete">删除</button>
+				</div>
+			</div>
+			<div  class="border mt-3 bg-dark text-white" style="height: 300px;overflow: auto;word-wrap: break-word;word-break: break-all;border-radius: 10px;padding: 10px;">
+				<h4>结果：</h4>
+				<div id="result"></div>
+			</div>
+			<div class="input-group-append">
+					<button class="btn btn-danger" type="button" id="update" style='margin:0 auto' onclick="$('#result').html('')">清空结果</button>
+			</div>
+		</div>
+	
+		
+		<div class="col-md-2"></div>
+	</div>
+	</div>
+
+	<script>
+		$(window).on('keyup',e=>{
+			if(e.keyCode==13){
+				sendApi(e)
+			}
+		})
+		var now_arr = {},
+		now_index = -1;
+		$.load()
+		$("#delete").click(function(){
+			if (now_index !== -1) {
+				var tmp = JSON.parse(localStorage.getItem('test')||'[]')
+				tmp.splice(now_index,1)
+				localStorage.setItem('test',JSON.stringify(tmp))
+				now_index = -1
+				$('#url').val('')
+				$('#method').val('')
+				$('#params').val('')
+				$('#note').val('')
+				drop(3);
+			}
+		})
+		$("#update").click(function(){
+			if (now_index !== -1) {
+				var tmp = JSON.parse(localStorage.getItem('test')||'[]')
+				var odata = {
+					url:$('#url').val(),
+					method:$('#methodChoose').val(),
+					params:$('#params').val(),
+					note:$('#note').val()
+				}
+				tmp.splice(now_index,1,odata)
+				localStorage.setItem('test',JSON.stringify(tmp))
+				now_index = -1
+			}
+		})
+		$('#search').click(function() {
+			// event.stopPropagation();
+			$('#mydata').css({display:'block'})
+			return false
+		})
+
+		$(window).click(function(){
+			$('#mydata').css({display:'none'})
+		})
+		function drop(e,json){
+			var ver = false
+			if (typeof e !== 'object') {
+				if (parseInt(e)==3) {
+					ver = true
+				}else{
+					ver = false
+				}
+			}else{
+				try {
+					if(e.target.value=='3') {
+						ver = true
+					}
+				}
+				catch(e){
+					ver = false
+				}
+			}
+
+			if(ver){
+				$('#choose').css({'visibility':'visible'})
+				// $('#choose').html = 
+				var html =''
+				if (!json) {
+					var last_arr = localStorage.getItem('test') || '[]';
+					last_arr = JSON.parse(last_arr);
+					if (JSON.stringify(now_arr) == '{}') {
+						now_arr = last_arr;
+					}
+					
+					last_arr.forEach(v=>{
+					html += `<li class="odata">
+							<span class="data-detail">${v.url}</span>
+							<span class="data-detail">${v.params}</span>
+							<span class="data-detail">${v.method}</span>
+						</li>`
+					})
+				}else{
+					Object.keys(json).forEach(i=>{
+					var v = json[i]
+					html += `<li class="odata">
+							<span class="data-detail">${v.url}</span>
+							<span class="data-detail">${v.params}</span>
+							<span class="data-detail">${v.method}</span>
+						</li>`
+					})
+					now_arr = json
+				}
+				
+				if (!html) {
+					$('#mydata').html('<li class="odata">没有数据</li>');
+					return;
+				}
+				 $('#mydata').html(html)
+
+			}else{
+				$('#choose').css({'visibility':'hidden'})
+			}
+			$('.odata').each((index,ele)=>{
+				$(ele).click((e)=>{
+					// console.log(index)
+					var obj = now_arr[index]
+					now_index = index
+					// console.log(now_arr)
+					$('#url').val(obj['url'])
+					$('#methodChoose').val(obj['method'])
+					$('#params').val(obj['params'])
+					$('#note').html(obj['note'])
+				})
+			})
+		}
+		$('#search').on('input',(e)=>{
+			// console.log(e)
+			var search_str = $('#search').val()
+			var search_arr = search_str.split(' ');
+			search_arr.slice(-1)==''?search_arr.splice(-1):false
+			// console.log(search_arr)
+			var last_arr = JSON.parse(localStorage.getItem('test')||'[]');
+
+			// console.log(searchMe(last_arr,0,search_str));
+			function searchMe(obj,search_arr,time){
+				if (!time) {time = 0}
+				var result = {}
+				var re = new RegExp(search_arr[time],'ig')
+
+				for(var i in obj){
+					var v = obj[i]
+
+					//搜索属性匹配
+					for(var vv in v){
+						if(re.test(v[vv])){
+							result[i] = v
+							break;
+						}
+					}
+				}
+				time++;
+
+				//结束
+				if (time >= search_arr.length) {
+					// console.log(result)
+					return result;
+				}
+				//继续
+				return searchMe(result,search_arr,time);
+			}
+			drop(3,searchMe(last_arr,search_arr,0))
+
+		})
+		$(()=>{
+			drop($('#actionChoose').val())
+		})
+		$("#actionChoose").on('change',drop)
+
+		var host = "http://fuck.u/api/";
+		function convert(str) {
+			var f_arr = str.split('&');
+			var tmp = {};
+			for (var i = f_arr.length - 1; i >= 0; i--) {
+				var col = f_arr[i].split('=');
+				tmp[col[0]]=col[1]
+			}
+			return tmp
+		}
+		$('#send').click(sendApi)
+		function sendApi(e){
+			// console.log($("#methodChoose").val())
+			if (file.files[0]) {
+				var data = new FormData();
+				data.append('pic',file.files[0])
+				var params = convert($('#params').val())
+				for (var x in params) {
+					data.append(x,params[x])
+				}
+			}else{
+				var data = convert($('#params').val())
+			}
+			console.log(data.get('pic'))
+			$.load({
+				url:host+$("#url").val(),
+				method:$("#methodChoose").val(),
+				data:data,
+				processData: false, //jquery 是否对数据进行 预处理
+                // contentType: false // 不要自己修改请求内容类型
+			}).then(data=>{
+				$.success("成功")
+				$('#result').html(JSON.stringify(data).replace(/<.*[^<>]>/g,''))
+
+			}).catch(e=>{
+				try{
+					var msg = e.responseJSON['msg']
+				}
+				catch(e){
+					var msg = '异常'
+				}
+				console.log(msg)
+				$.error(msg)
+				$('#result').html(JSON.stringify(e.responseText).replace(/\\n/g,""))
+
+			})
+		}
+
+		$('#action').click(e=>{
+			var val=$('#actionChoose').val()
+
+			// var base = $('#url').val().match(/^(.+?\/.+?\/.+?)/)[0];
+			switch(val){
+				case '0':
+				case '2':
+					if (!$('#url').val()) {
+						$.error('不存在url')
+						break;
+					}
+					// alert(methodChoose.value)
+					var data = {
+						url:$('#url').val(),
+						method:$('#methodChoose').val(),
+						params:$('#params').val(),
+						note:$('#note').val(),
+					};
+					var last_arr = localStorage.getItem('test') || '[]'
+					last_arr = JSON.parse(last_arr);
+					last_arr.push(data)
+					localStorage.setItem('test',JSON.stringify(last_arr));
+					$.success('保存成功')
+				case "2":
+					break;
+				case '1':
+					$('#url').val('')
+					$('#params').val('')
+					$('#note').val('')
+					break;
+				default:
+					console.log(val)
+			}
+		})
+
+	</script>
+</body>
+</html>

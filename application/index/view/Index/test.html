@@ -1,0 +1,70 @@
+<?php 
+	use think\Db;
+	use think\facade\Request;
+	if (Request::isPost()) {
+		// echo "123";
+		// $data['name'] = Request::post('name')
+		$data = Request::post('data');
+		$data = preg_replace("/”|“|\"|'/", "", $data);
+		$data = preg_replace("/，| |、/", ",", $data);
+
+		$arr = explode(",", $data);
+
+		$data = [];
+		foreach ($arr as $value) {
+			$res = Db::table('label')->get(['name'=>$value]);
+			if (null===$res && !!$value) {
+				//没有增加
+				$data['level'] = 1;
+				$data['property'] = 1;
+				$data['type'] = 3;
+				$data['create_time'] = date("Y-m-d H:i:s");
+				$data['name'] = $value;
+				// halt($data);
+				// dump($data);
+				// die();
+				$id = Db::table('label')->insertGetId($data);
+				echo $id;
+				continue;
+			}
+		}
+
+		exit();
+	}
+	
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="http://127.0.0.1/css/bootstrap.min.css">
+	<script src="http://127.0.0.1/js/jquery.min.js"></script>
+	<title>Document</title>
+</head>
+<body>
+	<!-- <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea> -->
+	<div class="input-group col-6">
+		<input type="text" class="form-control" id="text">
+		<input type="button" value="提交" class="btn btn-primary" id="send">
+	</div>
+	<script>
+		$('#send').click(function (e) {
+			$.ajax({
+				method:'post',
+				data:{
+					data:$('#text').val()
+				},
+				success:(data)=>{
+					console.log(data)
+				},
+				fail:(e)=>{
+					
+				}
+			});
+		})
+	</script>
+	
+
+</body>
+</html>

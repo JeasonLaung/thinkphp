@@ -1,0 +1,130 @@
+<script src="http://127.0.0.1/js/jquery.min.js"></script>
+<input type="file" id="file" multiple="multiple">
+<script>
+  $('#file').on('change',function(e) {
+    var fd = new FormData();
+    // console.log($(this)[0].files)
+    fd.append('logo',$(this)[0].files[0]);
+    fd.append('title',123);
+    $.ajax({
+      // url:'http://fuck.u/upload/logo',
+      url:'/api/hr/updateLogo',
+      // url:'/upload/photo',
+      method:'POST',
+      processData:false,
+      data:fd,
+      contentType:false,
+      success(data){
+        console.log(data)
+      }
+    })
+  })
+  $(function(){
+    $.ajax({
+      url:'/api/hr/updateLogo',
+      // url:'/company/info',
+      // url:'/api/super_admin/confirmCompany/id/13',
+      // url:'/api/super_admin',
+
+
+      // url:'/company/add',
+      // url:'/hr/join',
+
+      // url:'/student/experience/2',
+
+      // url:'/student/add_experience',
+
+      // url:'/student/add_education',
+
+      // url:'/student/work/5',
+
+      // url:'/student/add_work',
+      // url:'/student/del_label',
+      // url:'/student/add_label',
+
+
+      // url:'/student/display',
+
+      // url:'/student/info',
+      // url:'/student/expect',
+      // url:'/get_user_info',
+      // url:'/get_role',
+      // url:'/user/login',
+      // url:'/student/register',
+      // url:'/company/register',
+
+      // url:'/user/verify',
+
+      // method:'post',
+      // method:'delete',
+      
+      // method:'GET',
+      // method:'PUT',
+      method:'POST',
+      // method:'PATCH',
+
+      data:{
+        home:'www.baidu.com'
+      },
+
+      // data:{
+      //   company_name:'东莞市三星品高电子商务有限公司'
+      // },
+
+      // data:{
+      //   company_name:'444444444',
+      //   description:'www.kujiale.com/festatic/enterprise?utm_source=baidu_pz&utm_medium=cpc&utm_campaign=Brand_Sep_17&utm_content=main&utm_term=title',
+      //   position_name:'789',
+      //   from:'2018-12-18',
+      //   to:'2018-12-19'
+      // },
+
+
+
+      // data:{
+      //   school_name:'123',
+      //   description:'www.kujiale.com/festatic/enterprise?utm_source=baidu_pz&utm_medium=cpc&utm_campaign=Brand_Sep_17&utm_content=main&utm_term=title',
+      //   major_name:'789',
+      //   from:'2018-12-18',
+      //   to:'2018-12-19'
+      // },
+
+      // data:{
+      //   work_name:'123',
+      //   work_link:'www.kujiale.com/festatic/enterprise?utm_source=baidu_pz&utm_medium=cpc&utm_campaign=Brand_Sep_17&utm_content=main&utm_term=title',
+      //   photo:'\\photo\\20190120\\e69327d77b75ce90aef742db3c477133.png',
+      //   description:'',
+      //   from:'2018-12-18',
+      //   to:'2017-12-18'
+      // },
+      // data:{
+      //   label_id:13
+      // },
+      // data:{
+      //   label_name:123
+      // },
+
+      // data:{
+        // expect_job:'搬砖',
+        // expect_city:'北京',
+        // expect_salary:'0k_5k',
+      // },
+      // data:{
+      //   name:'123',
+      //   degree:'2',
+      //   birthday:'1998-12-18',
+      //   experience:'5',
+      //   gender:'0'
+      // },
+      // processData:false,
+      // data:{email:'862573687@qq.com'},
+
+      // data:{username:'862573687@qq.com',captcha:'431983',password:"123456"},
+      contentType:false,
+      success(data){
+        console.log(data)
+      }
+    })
+
+  })
+</script>

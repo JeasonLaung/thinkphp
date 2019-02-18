@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div class="container">
+	{if request()->param('id') == 1}
+	{foreach :model('photo')->field('path')->all() as $key=>$vo }
+		<img src="http://www.51renc.com{$vo.path}" class="photo">
+	{/foreach}
+	{/if}
+	{if request()->param('id') == 2}
+	{foreach :Db::connect([
+		'database'=>'test',
+		'type'=>'mysql',
+		'hostname'=>'127.0.0.1',
+		'username'=>'root',
+		'password'=>'root'])
+		->table('student')
+		->field('base_logo')
+		->where('base_gender','female')
+		->limit($limit)
+		->select() as $key=>$vo }
+		<img src="http://www.51renc.com{$vo.base_logo}" alt="" class="photo">
+	{/foreach}
+	{/if}   
+	</div>
+
+	<div style="" class="next" id="next">
+		→
+	</div>
+	<script>
+		next.onclick=function () {
+			window.location.href = 'http://fuck.u/api/index/index/id/2/page/'+"{:request()->param('page')+1}"
+		}
+	</script>
+	<style>
+	.next{
+		border: 5px solid #111;
+		background-color: #aaa;
+		font-size: 25px;
+		font-weight: bolder;
+		position:fixed;bottom:50px;right: 50px;
+		/*background: #fff;*/
+		width: 50px;
+		height: 50px;
+		border-radius: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+		.container{
+			margin:0 auto;
+		}
+		.photo{
+			width: 100px;
+			height: 100px;
+			padding: 5px;
+		}
+	</style>
+</body>
+</html>
